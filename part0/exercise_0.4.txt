@@ -1,3 +1,5 @@
+title 0.4 New Note
+
 browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
 server-->browser: HTTP 302 Found
 note over browser:
