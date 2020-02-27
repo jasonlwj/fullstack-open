@@ -1,1 +1,3 @@
 # fullstack-open
+
+`{() => fs}`
