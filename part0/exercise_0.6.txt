@@ -1,0 +1,9 @@
+title 0.6 New Note
+
+note over browser:
+javascript code adds note to
+the local notes list
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->browser: 201 Created
