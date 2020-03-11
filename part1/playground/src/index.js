@@ -1,34 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 
-const Hello = (props) => {
+const Display = ({ counter }) => (
+	<div>{counter}</div>
+)
+
+const Button = ({ onClick, text }) => (
+	<button onClick={onClick}>
+		{text}
+	</button>
+)
+
+const App = props => {
+	const [counter, setCounter] = useState(0)
+
+	const setToValue = value => setCounter(value)
+
 	return (
 		<div>
-			<p>привет {props.name}, тебе {props.age} лет</p>
+			<Display counter={counter} />
+			<Button 
+				onClick={() => setToValue(counter + 1)}
+				text='plus'
+			/>
+			<Button 
+				onClick={() => setToValue(counter - 1)}
+				text='minus'
+			/>
+			<Button 
+				onClick={() => setToValue(0)}
+				text='zero'
+			/>
 		</div>
 	)
 }
 
-const Footer = () => {
-	return (
-		<div>
-			<p>
-				<span>greeting app created by </span>
-				<a href="https://github.com/mluukkai">mluukkai</a>
-			</p>
-		</div>
-	)
-}
-
-const App = () => {
-	return (
-		<div className="header">
-			<h1>Följ ljuset</h1>
-			<Hello name="Maya" age={20 + 10} />
-			<Footer />
-		</div>
-	)
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(
+	<App />, 
+	document.getElementById('root')
+)
