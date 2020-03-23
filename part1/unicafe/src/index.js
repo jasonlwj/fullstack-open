@@ -16,7 +16,7 @@ const Statistic = ({ text, value }) =>
 const Statistics = ({ good, neutral, bad }) => {
 	const getAll = () => good + neutral + bad
 	const getAverage = () => good - bad
-	const getPositive = () => Math.floor((good / getAll()) * 100)
+	const getPositive = () => Math.floor((good / getAll()) * 100) + '%'
 
 	if (getAll() === 0)
 		return (
@@ -27,12 +27,14 @@ const Statistics = ({ good, neutral, bad }) => {
 
 	return (
 		<table>
-			<Statistic text={'good'} value={good} />
-			<Statistic text={'neutral'} value={neutral} />
-			<Statistic text={'bad'} value={bad} />
-			<Statistic text={'all'} value={getAll()} />
-			<Statistic text={'average'} value={getAverage()} />
-			<Statistic text={'positive'} value={getPositive()} />
+			<tbody>
+				<Statistic text={'good'} value={good} />
+				<Statistic text={'neutral'} value={neutral} />
+				<Statistic text={'bad'} value={bad} />
+				<Statistic text={'all'} value={getAll()} />
+				<Statistic text={'average'} value={getAverage()} />
+				<Statistic text={'positive'} value={getPositive()} />
+			</tbody>
 		</table>
 	)
 }
