@@ -12,6 +12,14 @@ const Statistics = ({ good, neutral, bad }) => {
 	const getAverage = () => good - bad
 	const getPositive = () => Math.floor((good / getAll()) * 100)
 
+	if (getAll() === 0)
+		return (
+			<div>
+				<h1>statistics</h1>
+				<p>No feedback given</p>
+			</div>
+		)
+
 	return (
 		<div>
 			<h1>statistics</h1>
