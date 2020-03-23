@@ -22,6 +22,12 @@ const App = () => {
 			setBad(bad + 1)
 	}
 
+	const getAll = () => good + neutral + bad
+
+	const getAverage = () => good - bad
+
+	const getPositive = () => Math.floor((good / getAll()) * 100)
+
 	return(
 		<div>
 			<h1>give feedback</h1>
@@ -42,6 +48,9 @@ const App = () => {
 				good {good}<br />
 				neutral {neutral}<br />
 				bad {bad}<br />
+				all {getAll()}<br />
+				average {getAverage()}<br />
+				positive {getPositive()} %<br />
 			</p>
 		</div>
 	)
