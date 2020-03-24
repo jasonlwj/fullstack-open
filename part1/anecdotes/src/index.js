@@ -11,6 +11,13 @@ const anecdotes = [
 	'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
+const Anecdote = ({ anecdote, votes }) => (
+	<p>
+		{anecdote}<br />
+		...has {votes} votes
+	</p>
+)
+
 const Button = ({ text, handleClick }) => 
 	<button onClick={handleClick}>
 		{text}
@@ -19,6 +26,12 @@ const Button = ({ text, handleClick }) =>
 const App = ({ anecdotes }) => {
 	const [selected, setSelected] = useState(0)
 	const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+
+	const getTopAnecdoteIndex = () => {
+		const maxVotes = Math.max(...votes)
+		const indexOfMax = votes.indexOf(maxVotes)
+		return indexOfMax
+	}
 	
 	const randomiseState = () => {
 		let randIndex
@@ -30,20 +43,32 @@ const App = ({ anecdotes }) => {
 		setSelected(randIndex)
 	}
 
-	const voteAnecdote = index => {
+	const voteAnecdote = () => {
 		const newVotes = [...votes]
-		newVotes[index] += 1
+		newVotes[selected] += 1
 		setVotes(newVotes)
 	}
-
+	
 	return (
 		<div>
-			<p>
-				{anecdotes[selected]}<br />
-				...has {votes[selected]} votes
-			</p>
-			<Button text='next anecdote' handleClick={() => randomiseState()} />
-			<Button text='vote' handleClick={() => voteAnecdote(selected)}/>
+			<h1>Anecdote of the day</h1>
+			<Anecdote 
+				anecdote={anecdotes[selected]} 
+				votes={votes[selected]} 
+			/>
+			<Button 
+				text='next anecdote' 
+				handleClick={() => randomiseState()} 
+			/>
+			<Button 
+				text='vote' 
+				handleClick={() => voteAnecdote()}
+			/>
+			<h1>Anecdote with most votes</h1>
+			<Anecdote 
+				anecdote={anecdotes[getTopAnecdoteIndex()]} 
+				votes={votes[getTopAnecdoteIndex()]} 
+			/>
 		</div>
 	)
 }
