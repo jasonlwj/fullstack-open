@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
 
 const anecdotes = [
 	'If it hurts, do it more often',
@@ -18,7 +18,8 @@ const Button = ({ text, handleClick }) =>
 
 const App = ({ anecdotes }) => {
 	const [selected, setSelected] = useState(0)
-
+	const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+	
 	const randomiseState = () => {
 		let randIndex
 
@@ -29,10 +30,20 @@ const App = ({ anecdotes }) => {
 		setSelected(randIndex)
 	}
 
+	const voteAnecdote = index => {
+		const newVotes = [...votes]
+		newVotes[index] += 1
+		setVotes(newVotes)
+	}
+
 	return (
 		<div>
-			<p>{anecdotes[selected]}</p>
+			<p>
+				{anecdotes[selected]}<br />
+				...has {votes[selected]} votes
+			</p>
 			<Button text='next anecdote' handleClick={() => randomiseState()} />
+			<Button text='vote' handleClick={() => voteAnecdote(selected)}/>
 		</div>
 	)
 }
@@ -40,4 +51,4 @@ const App = ({ anecdotes }) => {
 ReactDOM.render(
 	<App anecdotes={anecdotes} />,
 	document.getElementById('root')
-);
+)
