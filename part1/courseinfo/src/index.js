@@ -1,35 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
 
-const Header = props => {
-	console.log('Header props:', props)
-	return (
-		<h1>{props.course}</h1>
-	)
-}
+const Header = ({ course }) => (
+	<div>
+		<h1>{course}</h1>
+	</div>
+)
 
-const Content = props => {
-	console.log('Content props:', props)
-	return (
-		<div>
-			<Part />
-			<Part />
-			<Part />
-		</div>
-	)
-}
+const Part = ({ name, exercises}) => (
+	<div>
+		<p>{name} {exercises}</p>
+	</div>
+)
 
-const Part = props => {
-	console.log('Part props:', props)
-	return (
-		<div>
-		</div>
-	)
-}
+const Content = ({ parts }) => (
+	<div>
+		<Part name={parts[0].name} exercises={parts[0].exercises} />
+		<Part name={parts[1].name} exercises={parts[1].exercises} />
+		<Part name={parts[2].name} exercises={parts[2].exercises} />
+	</div>
+)
 
-const Total = () => (
-	<></>
+const Total = ({ parts }) => (
+	<div>
+		<p>{parts[0].exercises + parts[1].exercises + parts[2].exercises}</p>
+	</div>
 )
 
 const App = () => {
@@ -49,11 +44,11 @@ const App = () => {
 				exercises: 14
 			}
 		]
-	} 
-		
+	}
+
 	return (
 		<div>
-			<Header course={course.name}	/>
+			<Header course={course.name} />
 			<Content parts={course.parts} />
 			<Total parts={course.parts} />
 		</div>
