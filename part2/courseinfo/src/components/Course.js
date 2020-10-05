@@ -1,17 +1,5 @@
 import React from 'react'
 
-// const App = () => {
-// 	const course = {...}
-
-// 	return (
-// 		<div className="App">
-// 			<Header course={course.name} />
-// 			<Content parts={course.parts} />
-// 			<Total parts={course.parts} />
-// 		</div>
-// 	)
-// }
-
 const Header = ({ name }) => (
 	<div>
 		<h1>{name}</h1>
@@ -43,6 +31,7 @@ const Course = ({ course }) => {
 		<div>
 			<Header name={course.name} />
 			<Content parts={course.parts} />
+			<Total parts={course.parts} />
 		</div>
 	)
 }
