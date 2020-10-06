@@ -5,12 +5,13 @@ const App = () => {
 		{ name: 'Arto Hellas' }
 	]) 
 	const [ newName, setNewName ] = useState('')
+	const [ newNumber, setNewNumber ] = useState('')
 
-	const handleNewNameChange = event => {
-		setNewName(event.target.value)
-	}
+	const handleNewNameChange = event => setNewName(event.target.value)
 
-	const addName = event => {
+	const handleNewNumberChange = event => setNewNumber(event.target.value)
+
+	const addPerson = event => {
 		event.preventDefault()
 
 		for (const person of persons) {
@@ -20,8 +21,11 @@ const App = () => {
 			}
 		}
 
-		const nameToAdd = { name: newName }
-		setPersons(persons.concat(nameToAdd))
+		const personToAdd = { 
+			name: newName,
+			number: newNumber
+		}
+		setPersons(persons.concat(personToAdd))
 		setNewName('')
 	}
 
@@ -29,9 +33,12 @@ const App = () => {
 		<div className="App">
 			<div>
 				<h2>Phonebook</h2>
-				<form onSubmit={addName}>
+				<form onSubmit={addPerson}>
 					<div>
 						name: <input value={newName} onChange={handleNewNameChange} />
+					</div>
+					<div>
+						number: <input value={newNumber} onChange={handleNewNumberChange} />
 					</div>
 					<div>
 						<button type="submit">add</button>
