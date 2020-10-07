@@ -23,9 +23,7 @@ const App = () => {
 
 	// form state event handlers
 	const handleNewNameChange = event => setNewName(event.target.value)
-
 	const handleNewNumberChange = event => setNewNumber(event.target.value)
-
 	const handleFilterValueChange = event => setFilterValue(event.target.value)
 
 	const addPerson = event => {
