@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Country = ({ country }) => {
+const Country = ({ country, weatherInfo, handleWeatherInfoChange }) => {
+	const api_key = process.env.REACT_APP_API_KEY
+
+	useEffect(() => {
+		axios
+			.get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${country.capital}`)
+			.then(response => {
+				handleWeatherInfoChange(response.data.current)
+			})
+	}, [country])
+
 	return (
 		<div>
 			<h1>{country.name}</h1>
@@ -16,25 +26,25 @@ const Country = ({ country }) => {
 			<img src={country.flag} height="200" alt="flag" />
 			<h2>Weather in {country.capital}</h2>
 			<div>
-				<b>temperature: </b>
-				poop
+				<b>temperature:</b> {weatherInfo.temperature} Celsius<br />
+				<img src={weatherInfo.weather_icons} height="100" alt="weather" />
 			</div>
 			<div>
-				<b>wind: </b>
+				<b>wind:</b> {weatherInfo.wind_speed} mph direction {weatherInfo.wind_dir}
 			</div>
 		</div>
 	)
 }
 
-const Results = ({ countries, countryShown, handleCountryShownChange }) => {
+const Results = ({ countries, countryShown, weatherInfo, handleCountryShownChange, handleWeatherInfoChange }) => {
 	if (countries.length > 10)
 		return <div>Too many matches, please specify another filter</div>
 	
 	if (countryShown)
-		return <Country country={countryShown} />
+		return <Country country={countryShown} weatherInfo={weatherInfo} handleWeatherInfoChange={handleWeatherInfoChange} />
 
 	if (countries.length === 1)
-		return <Country country={countries[0]} />
+		return <Country country={countries[0]} weatherInfo={weatherInfo} handleWeatherInfoChange={handleWeatherInfoChange}  />
 
 	if (countries.length > 1)
 		return (
@@ -58,6 +68,7 @@ const App = () => {
 	const [ term, setTerm ] = useState('')
 	const [ results, setResults ] = useState([])
 	const [ countryShown, setCountryShown ] = useState('')
+	const [ weatherInfo, setWeatherInfo ] = useState({})
 
 	// fetch data from api
 	useEffect(() => {
@@ -76,6 +87,10 @@ const App = () => {
 		setCountryShown(country)
 	}
 
+	const handleWeatherInfoChange = weatherInfo => {
+		setWeatherInfo(weatherInfo)
+	}
+
 	const countriesToShow = results.filter(
 		country => country.name.toLowerCase().includes(term.toLowerCase())
 	)
@@ -83,12 +98,17 @@ const App = () => {
 	// render
 	return (
 		<div className="App">
-			<small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small><br />
 			<div>
 				find countries <input value={term} onChange={handleTermChange} />
 				{
 					(term)
-					? <Results countries={countriesToShow} countryShown={countryShown} handleCountryShownChange={handleCountryShownChange} /> 
+					? <Results 
+							countries={countriesToShow}
+							countryShown={countryShown}
+							weatherInfo={weatherInfo}
+							handleCountryShownChange={handleCountryShownChange}
+							handleWeatherInfoChange={handleWeatherInfoChange}
+						/> 
 					: <div></div>
 				}
 			</div>
