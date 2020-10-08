@@ -14,11 +14,19 @@ const Country = ({ country }) => {
 				)}
 			</ul>
 			<img src={country.flag} height="200" alt="flag" />
+			<h2>Weather in {country.capital}</h2>
+			<div>
+				<b>temperature: </b>
+				poop
+			</div>
+			<div>
+				<b>wind: </b>
+			</div>
 		</div>
 	)
 }
 
-const CountryList = ({ countries, countryShown, handleCountryShownChange }) => {
+const Results = ({ countries, countryShown, handleCountryShownChange }) => {
 	if (countries.length > 10)
 		return <div>Too many matches, please specify another filter</div>
 	
@@ -40,7 +48,9 @@ const CountryList = ({ countries, countryShown, handleCountryShownChange }) => {
 			</div>
 		)
 
-	return <div></div>
+	return (
+		<div>No results found</div>
+	)
 }
 
 const App = () => {
@@ -73,11 +83,12 @@ const App = () => {
 	// render
 	return (
 		<div className="App">
+			<small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small><br />
 			<div>
 				find countries <input value={term} onChange={handleTermChange} />
 				{
 					(term)
-					? <CountryList countries={countriesToShow} countryShown={countryShown} handleCountryShownChange={handleCountryShownChange} /> 
+					? <Results countries={countriesToShow} countryShown={countryShown} handleCountryShownChange={handleCountryShownChange} /> 
 					: <div></div>
 				}
 			</div>
