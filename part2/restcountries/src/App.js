@@ -18,19 +18,27 @@ const Country = ({ country }) => {
 	)
 }
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, countryShown, handleCountryShownChange }) => {
 	if (countries.length > 10)
 		return <div>Too many matches, please specify another filter</div>
+	
+	if (countryShown)
+		return <Country country={countryShown} />
+
+	if (countries.length === 1)
+		return <Country country={countries[0]} />
 
 	if (countries.length > 1)
 		return (
 			<div>
-				{countries.map(country => <div key={country.alpha3Code}>{country.name}</div>)}
+				{countries.map(country => 
+					<div key={country.alpha3Code}>
+						{country.name + ' '} 
+						<button onClick={() => handleCountryShownChange(country)}>show</button>
+					</div>
+				)}
 			</div>
 		)
-
-	if (countries.length === 1)
-		return <Country country={countries[0]} />
 
 	return <div></div>
 }
@@ -39,30 +47,39 @@ const App = () => {
 	// declare state
 	const [ term, setTerm ] = useState('')
 	const [ results, setResults ] = useState([])
+	const [ countryShown, setCountryShown ] = useState('')
 
 	// fetch data from api
-	// GET from https://restcountries.eu/rest/v2/name/{name}
 	useEffect(() => {
-		if (term)
-			axios
-				.get(`https://restcountries.eu/rest/v2/name/${term}`)
-				.then(response => {
-					setResults(response.data)
-				})
-				.catch(error => console.log('Country not found'))
-	}, [term])
+		axios
+			.get('https://restcountries.eu/rest/v2/all')
+			.then(response => setResults(response.data))
+	}, [])
 
 	// form state event handlers
 	const handleTermChange = event => {
 		setTerm(event.target.value)
+		setCountryShown('')
 	}
+
+	const handleCountryShownChange = country => {
+		setCountryShown(country)
+	}
+
+	const countriesToShow = results.filter(
+		country => country.name.toLowerCase().includes(term.toLowerCase())
+	)
 
 	// render
 	return (
 		<div className="App">
 			<div>
 				find countries <input value={term} onChange={handleTermChange} />
-				<CountryList countries={results} />
+				{
+					(term)
+					? <CountryList countries={countriesToShow} countryShown={countryShown} handleCountryShownChange={handleCountryShownChange} /> 
+					: <div></div>
+				}
 			</div>
 		</div>
 	)
