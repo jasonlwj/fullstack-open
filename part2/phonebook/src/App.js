@@ -27,16 +27,25 @@ const App = () => {
 	const addPerson = event => {
 		event.preventDefault()
 
-		for (const person of persons) {
-			if (person.name === newName) {
-				alert(`${newName} has already been added to the phonebook`)
-				return
-			}
-		}
-
 		const personToAdd = { 
 			name: newName,
 			number: newNumber
+		}
+
+		for (const person of persons) {
+			if (person.name.toLowerCase() === newName.toLowerCase()) {
+				if (window.confirm(`${newName} has already been added to the phonebook, replace the older number with a new one?`))
+					personService
+						.update(person.id, personToAdd)
+						.then(returnedPerson => 
+							setPersons(persons.map(
+								person => person.id === returnedPerson.id ? returnedPerson : person
+							))
+						)
+						setNewName('')
+						setNewNumber('')
+				return
+			}
 		}
 
 		personService
@@ -51,12 +60,12 @@ const App = () => {
 	// delete entry
 	const deletePerson = personToDelete => {
 		if (window.confirm(`Delete ${personToDelete.name} ?`))
-			console.log(`removing person with id ${personToDelete.id}`)
 			personService
 				.remove(personToDelete.id)
 				.then(setPersons(persons.filter(person => person.id !== personToDelete.id)))
 	}
 
+	// filter persons to show
 	const personsToShow = persons.filter(person => 
 		person.name.toLowerCase().includes(filterValue.toLowerCase())
 	)
