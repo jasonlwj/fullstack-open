@@ -41,6 +41,18 @@
       "date": "2020-10-10T09:01:34.814Z",
       "important": false,
       "id": 7
+    },
+    {
+      "content": "test error",
+      "date": "2020-10-12T01:48:01.104Z",
+      "important": true,
+      "id": 8
+    },
+    {
+      "content": "test null",
+      "date": "2020-10-12T01:48:15.407Z",
+      "important": true,
+      "id": 9
     }
   ]
 }

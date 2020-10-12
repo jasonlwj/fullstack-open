@@ -3,6 +3,7 @@ import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
+import Notification from './components/Notification'
 
 const App = () => {
 	// declare state
@@ -10,6 +11,7 @@ const App = () => {
 	const [ newName, setNewName ] = useState('')
 	const [ newNumber, setNewNumber ] = useState('')
 	const [ filterValue, setFilterValue ] = useState('')
+	const [ notificationMessage, setNotificationMessage] = useState(null)
 
 	// fetch data from server
 	useEffect(() => {
@@ -37,13 +39,15 @@ const App = () => {
 				if (window.confirm(`${newName} has already been added to the phonebook, replace the older number with a new one?`))
 					personService
 						.update(person.id, personToAdd)
-						.then(returnedPerson => 
+						.then(returnedPerson => {
 							setPersons(persons.map(
 								person => person.id === returnedPerson.id ? returnedPerson : person
 							))
-						)
+							setNotificationMessage(`Updated ${returnedPerson.name}`)
+						})
 						setNewName('')
 						setNewNumber('')
+						setTimeout(() => setNotificationMessage(null), 5000)
 				return
 			}
 		}
@@ -52,8 +56,10 @@ const App = () => {
 			.create(personToAdd)
 			.then(returnedPerson => {
 				setPersons(persons.concat(returnedPerson))
+				setNotificationMessage(`Added ${returnedPerson.name}`)
 				setNewName('')
 				setNewNumber('')
+				setTimeout(() => setNotificationMessage(null), 5000)
 			})
 	}
 
@@ -75,6 +81,7 @@ const App = () => {
 		<div className="App">
 			<div>
 				<h2>Phonebook</h2>
+				<Notification message={notificationMessage} />
 				<Filter 
 					filterValue={filterValue}
 					handleFilterValueChange={handleFilterValueChange}
