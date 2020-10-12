@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
 import Notification from './components/Notification'
+import Error from './components/Error'
 
 const App = () => {
 	// declare state
@@ -12,6 +13,7 @@ const App = () => {
 	const [ newNumber, setNewNumber ] = useState('')
 	const [ filterValue, setFilterValue ] = useState('')
 	const [ notificationMessage, setNotificationMessage] = useState(null)
+	const [ errorMessage, setErrorMessage] = useState(null)
 
 	// fetch data from server
 	useEffect(() => {
@@ -44,6 +46,11 @@ const App = () => {
 								person => person.id === returnedPerson.id ? returnedPerson : person
 							))
 							setNotificationMessage(`Updated ${returnedPerson.name}`)
+						})
+						.catch(error => {
+							setErrorMessage(`Information of ${person.name} has already been removed from server`)
+							setPersons(persons.filter(p => p.id !== person.id))
+							setTimeout(() => setErrorMessage(null), 5000)
 						})
 						setNewName('')
 						setNewNumber('')
@@ -82,6 +89,7 @@ const App = () => {
 			<div>
 				<h2>Phonebook</h2>
 				<Notification message={notificationMessage} />
+				<Error message={errorMessage} />
 				<Filter 
 					filterValue={filterValue}
 					handleFilterValueChange={handleFilterValueChange}
