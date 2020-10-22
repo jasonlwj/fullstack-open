@@ -45,6 +45,16 @@ app.delete('/api/persons/:id', (req, res) => {
 app.post('/api/persons', (req, res) => {
 	const body = req.body
 
+	if (!body.name || !body.number) 
+		return res.status(400).json({
+			error: 'name/number missing'
+		})
+	
+	if (persons.map(person => person.name).includes(body.name))
+		return res.status(400).json({
+			error: 'name must be unique'
+		})
+
 	const person = {
 		name: body.name,
 		number: body.number,
