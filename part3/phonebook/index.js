@@ -1,10 +1,31 @@
+const { json } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 
+/**
+ * Middleware Config
+ */
+
+// Binding the JSON Parser Middleware
 app.use(express.json())
 
-app.use(morgan('combined'))
+// Morgan token definitions
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+
+// Binding the Morgan Middleware
+app.use(morgan(
+	'dev',
+	{ skip: (req, res) => req.method === 'POST' }
+))
+app.use(morgan(
+	':method :url :status :response-time ms - :res[content-length] :body', 
+	{ skip: (req, res) => req.method !== 'POST' }
+))
+
+/**
+ * Data
+ */
 
 let persons = [
 	{
@@ -24,10 +45,16 @@ let persons = [
 	}
 ]
 
+/**
+ * Routes
+ */
+
+// GET all
 app.get('/api/persons', (req, res) => {
 	res.json(persons)
 })
 
+// GET by ID
 app.get('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	const person = persons.find(person => person.id === id)
@@ -38,6 +65,7 @@ app.get('/api/persons/:id', (req, res) => {
 		res.status(404).end()
 })
 
+// DELETE by ID
 app.delete('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	persons = persons.filter(person => person.id !== id)
@@ -45,6 +73,7 @@ app.delete('/api/persons/:id', (req, res) => {
 	res.status(204).end()
 })
 
+// POST
 app.post('/api/persons', (req, res) => {
 	const body = req.body
 
@@ -69,12 +98,17 @@ app.post('/api/persons', (req, res) => {
 	res.json(person)
 })
 
+// GET API information
 app.get('/info', (req, res) => {
 	res.send(`
 		<div>Phonebook has info for ${persons.length} people</div>
 		<div>${new Date()}</div>
 	`)
 })
+
+/**
+ * Bind to port and listen for requests
+ */
 
 const PORT = 3001
 app.listen(PORT, () => {
