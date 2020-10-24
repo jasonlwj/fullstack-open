@@ -1,5 +1,10 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
+
+/**
+ * Middleware Config
+ */
 
 const requestLogger = (req, res, next) => {
 	console.log('Method:', req.method)
@@ -15,6 +20,11 @@ const unknownEndpoint = (req, res, next) => {
 
 app.use(express.json())
 app.use(requestLogger)
+app.use(cors())
+
+/**
+ * Data
+ */
 
 let notes = [
 	{
@@ -43,6 +53,10 @@ const generateId = () => {
 	: 0
 	return maxId + 1
 }
+
+/**
+ * Routes
+ */
 
 app.get('/', (req, res) => {
 	res.send('<h1>haha funny poop</h1>')
@@ -92,7 +106,11 @@ app.post('/api/notes', (req, res) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+/**
+ * Bind to port and listen for requests
+ */
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
 	console.log(`Server now running on port ${PORT}`)
 })
